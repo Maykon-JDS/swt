@@ -1,5 +1,5 @@
 {
-  "name": "swt",
+  "name": "swt-ts",
   "version": "1.0.0",
   "description": "Simple Web Token",
   "main": "index.js",
