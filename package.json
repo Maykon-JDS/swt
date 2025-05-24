@@ -1,0 +1,32 @@
+{
+  "name": "swt",
+  "version": "1.0.0",
+  "description": "Simple Web Token",
+  "main": "index.js",
+  "module": "module",
+  "scripts": {
+    "test": "vitest -c \"test/vitest.config.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maykon-JDS/swt.git"
+  },
+  "keywords": [
+    "token",
+    "swt"
+  ],
+  "author": "maykon-jds",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Maykon-JDS/swt/issues"
+  },
+  "homepage": "https://github.com/Maykon-JDS/swt#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  },
+  "dependencies": {
+    "@types/node": "^22.15.21",
+    "date-fns": "^4.1.0"
+  }
+}
