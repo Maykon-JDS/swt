@@ -6,7 +6,8 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "vitest -c \"test/vitest.config.ts\""
+    "test": "vitest -c \"test/vitest.config.ts\"",
+    "build": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -29,5 +30,8 @@
   "dependencies": {
     "@types/node": "^22.15.21",
     "date-fns": "^4.1.0"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
