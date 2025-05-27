@@ -1,9 +1,9 @@
 import { expect, test, beforeEach, beforeAll, afterEach, vi } from 'vitest'
-import { SimpleWebTokenSingleton } from '../package/swt-singleton'
-import { IssuerNotDefinedException } from '../package/exceptions/issuer-not-defined-exception';
-import { SaltsNotDefinedException } from '../package/exceptions/salts-not-defined-exception';
-import { IssueContent, SWT } from '../package/types';
-import { InvalidAudienceException, InvalidSignatureException, TokenExpiredException } from '../package/exceptions';
+import { SimpleWebTokenSingleton } from '../src/swt-singleton'
+import { IssuerNotDefinedException } from '../src/exceptions/issuer-not-defined-exception';
+import { SaltsNotDefinedException } from '../src/exceptions/salts-not-defined-exception';
+import { IssueContent, SWT } from '../src/types';
+import { InvalidAudienceException, InvalidSignatureException, TokenExpiredException } from '../src/exceptions';
 
 beforeAll(() => {
 

@@ -2,7 +2,8 @@
   "name": "@maykon-jds/swt-ts",
   "version": "1.0.0",
   "description": "Simple Web Token",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "vitest -c \"test/vitest.config.ts\""
