@@ -4,7 +4,7 @@
   "description": "Simple Web Token",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "vitest -c \"test/vitest.config.ts\"",
     "build": "tsc -p tsconfig.json"
