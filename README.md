@@ -13,37 +13,29 @@
   - [Sumário](#sumário)
   - [Introdução](#introdução)
   - [Tecnologias Usadas](#tecnologias-usadas)
-  - [Estrutura do Projeto](#estrutura-do-projeto)
-  - [Como Executar o Projeto](#como-executar-o-projeto)
-  - [Como Contribuir](#como-contribuir)
   - [Licença](#licença)
-  - [Estrutura SWT](#estrutura-swt)
-  - [Formação do campo "signature" SWT](#formação-do-campo-signature-swt)
-  - [Solicitação de SWT](#solicitação-de-swt)
-  - [Validação do SWT](#validação-do-swt)
-  - [Revogação de SWT](#revogação-de-swt)
 
 ## Introdução
-O Simple Web Token (SWT) é uma implementação de token simples e segura baseada em HMAC SHA256 com dupla aplicação de salt. É útil em cenários onde você precisa de um controle próprio de geração, validação e revogação de tokens, sem depender de JWT ou bibliotecas externas pesadas.
+O Simple Web Token (SWT) é uma implementação de token simples e segura baseada em HMAC SHA256 com dupla aplicação de salt. Foi criado apenas para ser utilizado em ambiente de estudo, **NÃO DEVE SER UTILIZADO EM PROTUÇÃO**.
 
 ## Tecnologias Usadas
 ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)&nbsp;
 ![NodeJS](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)&nbsp;
 ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)&nbsp;
 
-## Estrutura do Projeto
+<!-- ## Estrutura do Projeto
 Para entender a estrutura do projeto, consulte [Estrutura do Projeto](link_para_o_documentacao_estrutura.md).
 
 ## Como Executar o Projeto
 Para obter instruções sobre como executar o projeto, consulte [Como Executar o Projeto](link_para_o_documentacao_execucao.md).
 
 ## Como Contribuir
-Se você quiser contribuir para o projeto, por favor, siga as orientações em [Como Contribuir](link_para_o_documentacao_contribuicao.md).
+Se você quiser contribuir para o projeto, por favor, siga as orientações em [Como Contribuir](link_para_o_documentacao_contribuicao.md). -->
 
 ## Licença
 Este projeto está sob a [Licença MIT](./LICENSE.md). Consulte o arquivo [LICENSE.md](LICENSE.md) para obter mais detalhes.
 
----
+<!-- ---
 
 ## Estrutura SWT
 
@@ -92,4 +84,4 @@ Assinatura HMAC dupla com salts distintos aplicados sobre o payload serializado.
 ## Revogação de SWT
 
 1. Registrar a assinatura do token em uma lista de revogação.
-2. Armazenar metadados como data de revogação e motivo (opcional).
+2. Armazenar metadados como data de revogação e motivo (opcional). -->
