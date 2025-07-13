@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-    #   - main
-      - develop
+      - main
+      # - develop
 
 # Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 # permissions:
@@ -45,7 +45,10 @@ jobs:
         - uses: actions/setup-node@v4
           with:
            node-version: 20 # Let's get all the branches.
-        - run: npm install
+        - run: |
+            BRANCH=main
+            git checkout $BRANCH
+            npm install
     #   - name: Checkout
     #     uses: actions/checkout@v4
     #     with:
@@ -55,19 +58,19 @@ jobs:
         #   echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
     # outputs:
     #   current_step: ${{ steps.format_code.outputs.current_step }}
-        - name: Format Code
+        - name: Setup Git Config
           run: |
-            BRANCH=develop
-            git checkout $BRANCH
-
             git config user.name github-actions[bot]
             git config user.email github-actions[bot]@users.noreply.github.com
-
-            echo "pull"
-            git pull
           env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        - name: Format Code
+          run: |
+            npm run format
+            git add .
+            git commit -m "format code"
+          env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #   on_start:
 #     name: On start
 #     needs: get_current_step
