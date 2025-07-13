@@ -1,7 +1,5 @@
-import SWTException from "./swt-exception.abstract";
+import SWTException from './swt-exception.abstract';
 
 export class InvalidAudienceException extends SWTException {
-
-  public static CODE = "SWT002"
-
+    public static CODE = 'SWT002';
 }

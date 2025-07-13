@@ -1,7 +1,5 @@
-import SWTException from "./swt-exception.abstract"
+import SWTException from './swt-exception.abstract';
 
 export class SaltsNotDefinedException extends SWTException {
-
-  public static CODE = "SWT005"
-
+    public static CODE = 'SWT005';
 }

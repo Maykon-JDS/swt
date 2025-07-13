@@ -1,8 +1,8 @@
-import { ContentSWT, IssueContent, Salts, SWT } from "types";
-import { add } from "date-fns";
-import * as crypto from "node:crypto";
-import { SaltsNotDefinedException } from "../exceptions/salts-not-defined-exception";
-import { IssuerNotDefinedException } from "../exceptions/issuer-not-defined-exception";
+import { ContentSWT, IssueContent, Salts, SWT } from 'types';
+import { add } from 'date-fns';
+import * as crypto from 'node:crypto';
+import { SaltsNotDefinedException } from '../exceptions/salts-not-defined-exception';
+import { IssuerNotDefinedException } from '../exceptions/issuer-not-defined-exception';
 
 export class Issuer {
     private issuer: string;
@@ -28,7 +28,7 @@ export class Issuer {
     public issue(content: IssueContent): SWT {
         if (!this.issuer) {
             throw new IssuerNotDefinedException(
-                "Issuer must be set before issuing a token."
+                'Issuer must be set before issuing a token.',
             );
         }
 
@@ -38,8 +38,8 @@ export class Issuer {
 
         const contentSWT: ContentSWT = {
             sti: crypto.randomUUID(),
-            issuer: this.issuer ?? "",
-            audience: content.audience ?? "",
+            issuer: this.issuer ?? '',
+            audience: content.audience ?? '',
             expiresOn: (content.expiresOn
                 ? add(now, {
                       [content.expiresOn.scale]: content.expiresOn.time,
@@ -60,7 +60,7 @@ export class Issuer {
     public generateSignature(content: ContentSWT): string {
         if (!this.salts) {
             throw new SaltsNotDefinedException(
-                "Salts must be define before issuing a token."
+                'Salts must be define before issuing a token.',
             );
         }
 
@@ -69,14 +69,14 @@ export class Issuer {
         const contentJson = JSON.stringify(content);
 
         const intermediateHash = crypto
-            .createHmac("sha256", salt1)
+            .createHmac('sha256', salt1)
             .update(contentJson)
             .digest();
 
         const sign = crypto
-            .createHmac("sha256", salt2)
+            .createHmac('sha256', salt2)
             .update(intermediateHash)
-            .digest("base64");
+            .digest('base64');
 
         return sign;
     }
