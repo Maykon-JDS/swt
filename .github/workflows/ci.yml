@@ -6,47 +6,72 @@ on:
   workflow_dispatch:
   push:
     branches:
-    #   - main
-      - develop
+      - main
+      # - develop
 
 # Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
-# permissions:
+permissions:
   # Need `contents: read` to checkout the repository.
   # Need `contents: write` to update the step metadata.
-#   contents: write
+  contents: write
 
 jobs:
   # Get the current step to only run the main job when the learner is on the same step.
+#   setup_project:
+#     # if: >-
+#     #   ${{ !github.event.repository.is_template
+#     #       && needs.format_code.outputs.current_step == 0 }}
+#     name: Setup Project
+#     runs-on: ubuntu-latest
+#     steps:
+#         - uses: actions/checkout@v4
+#           with:
+#            fetch-depth: 0 # Let's get all the branches.
+#         - uses: actions/setup-node@v4
+#           with:
+#            node-version: 20 # Let's get all the branches.
+#         - run: npm install
   format_code:
     # if: >-
     #   ${{ !github.event.repository.is_template
     #       && needs.format_code.outputs.current_step == 0 }}
+    # needs: setup_project
     name: Format Code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Let's get all the branches.
+        - uses: actions/checkout@v4
+          with:
+           fetch-depth: 0 # Let's get all the branches.
+        - uses: actions/setup-node@v4
+          with:
+           node-version: 20 # Let's get all the branches.
+        - run: |
+            BRANCH=main
+            git checkout $BRANCH
+            npm install
+    #   - name: Checkout
+    #     uses: actions/checkout@v4
+    #     with:
+    #       fetch-depth: 0 # Let's get all the branches.
     #   - id: format_code
         # run: |
         #   echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
     # outputs:
     #   current_step: ${{ steps.format_code.outputs.current_step }}
-
-      - name: Checkout
-        run: |
-          BRANCH=develop
-          git checkout $BRANCH
-
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-
-          echo "pull"
-          git pull
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        - name: Setup Git Config
+          run: |
+            git config user.name github-actions[bot]
+            git config user.email github-actions[bot]@users.noreply.github.com
+          env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Format Code
+          run: |
+            npm run format
+            git add .
+            git commit -m "format code"
+            git push
+          env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #   on_start:
 #     name: On start
 #     needs: get_current_step

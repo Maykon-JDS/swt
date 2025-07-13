@@ -1,5 +1,3 @@
-export interface BuilderInterface <Type> {
-
+export interface BuilderInterface<Type> {
     build(): Type;
-
 }
