@@ -2,48 +2,41 @@ name: Continuous Integration Pipeline
 
 # Reference: https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
 
 # Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 permissions:
   contents: write
 
 jobs:
-  continuous_integration:
-    name: Format Code
+  ci:
     runs-on: ubuntu-latest
     steps:
+
         - name: Checkout repository
           uses: actions/checkout@v4
           with:
              fetch-depth: 0
+
         - name: Setup Node.js
           uses: actions/setup-node@v4
           with:
              node-version: 20
+
         - name: Install dependencies and checkout main
           run: |
-            BRANCH=main
+            BRANCH="${{ github.ref_name }}"
             git checkout $BRANCH
             npm install
-        - name: Setup Git Config
-          run: |
-            git config user.name github-actions[bot]
-            git config user.email github-actions[bot]@users.noreply.github.com
-          env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Format Code
+
+        - name: Run Prettier Check
           run: |
             npm run format
-            (git diff --quiet .) || (git add . && git commit -m "format code")
-          env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         - name: Run Tests
           run: |
             npm run test
-          env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
