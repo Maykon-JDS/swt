@@ -1,27 +1,22 @@
-import * as crypto from 'node:crypto';
-import { add } from 'date-fns';
 import {
   InvalidSignatureException,
   InvalidAudienceException,
   TokenExpiredException,
 } from './exceptions';
-import { Salts, IssueContent, SWT, ContentSWT, VerifyBypass } from './types';
-import { IssuerNotDefinedException } from './exceptions/issuer-not-defined-exception';
-import { SaltsNotDefinedException } from './exceptions/salts-not-defined-exception';
+import { IssueContent, SWT, VerifyBypass } from './types';
+import { Issuer } from 'builders/issuer';
 
 export class SimpleWebTokenSingleton {
 
   private static instance?: SimpleWebTokenSingleton;
 
-  private salts: Salts | undefined;
-
-  private issuer: string | undefined;
-
-  private audience: string[] = [];
+  private issuer: Issuer;
 
   private static isTestEnvironment:boolean = false;
 
-  private constructor() {}
+  private constructor(issuer: Issuer) {
+    this.issuer = issuer;
+  }
 
   static setTestEnvironment(isTestEnvironment:boolean): void {
 
@@ -29,10 +24,10 @@ export class SimpleWebTokenSingleton {
 
   }
 
-  static getInstance(): SimpleWebTokenSingleton {
+  static getInstance(issuer: Issuer): SimpleWebTokenSingleton {
     if (SimpleWebTokenSingleton.instance == null) {
 
-      SimpleWebTokenSingleton.instance = new SimpleWebTokenSingleton();
+      SimpleWebTokenSingleton.instance = new SimpleWebTokenSingleton(issuer);
     }
 
     return SimpleWebTokenSingleton.instance;
@@ -47,56 +42,20 @@ export class SimpleWebTokenSingleton {
     SimpleWebTokenSingleton.instance = undefined;
   }
 
-  public setIssuer(issuer: string): void {
-    this.issuer = issuer;
-  }
-
   public getIssuer(): string | undefined {
-    return this.issuer;
-  }
-
-  public setSalts(salts: Salts): void {
-    this.salts = salts;
-  }
-
-  public setAudience(audience: string[]): void {
-    this.audience = audience;
+    return this.issuer.getIssuer();
   }
 
   public getAudience(): string[] {
-    return this.audience;
+    return this.issuer.getAudience();
   }
 
   public issue(content: IssueContent): SWT {
-    if (!this.issuer) {
-      throw new IssuerNotDefinedException('Issuer must be set before issuing a token.');
-    }
-
-    const now = new Date;
-
-    const defaultExpiresOn = add(now, { minutes: 15 });
-
-    const contentSWT: ContentSWT = {
-      sti: crypto.randomUUID(),
-      issuer: this.issuer ?? '',
-      audience: content.audience ?? '',
-      expiresOn: (content.expiresOn
-        ? add(now, { [content.expiresOn.scale]: content.expiresOn.time })
-        : defaultExpiresOn
-      ).getTime(),
-      ...content.extras,
-    };
-
-    const swt: SWT = {
-      content: contentSWT,
-      signature: this.generateSignature(contentSWT),
-    };
-
-    return swt;
+    return this.issuer.issue(content);
   }
 
   public validate(swt: SWT, bypass: VerifyBypass[] = []): true {
-    const contentSignature = this.generateSignature(swt.content);
+    const contentSignature = this.issuer.generateSignature(swt.content);
 
     const now = Date.now();
 
@@ -105,7 +64,7 @@ export class SimpleWebTokenSingleton {
     }
 
     if (
-      !this.audience.includes(swt.content.audience) &&
+      !this.issuer.getAudience().includes(swt.content.audience) &&
       !bypass.includes('audience')
     ) {
       throw new InvalidAudienceException('Invalid Audience!');
@@ -117,28 +76,4 @@ export class SimpleWebTokenSingleton {
 
     return true;
   }
-
-  private generateSignature(content: ContentSWT): string {
-
-    if (!this.salts) {
-      throw new SaltsNotDefinedException('Salts must be define before issuing a token.');
-    }
-
-    const [salt1, salt2]: Salts = this.salts;
-
-    const contentJson = JSON.stringify(content);
-
-    const intermediateHash = crypto
-      .createHmac('sha256', salt1)
-      .update(contentJson)
-      .digest();
-
-    const sign = crypto
-      .createHmac('sha256', salt2)
-      .update(intermediateHash)
-      .digest('base64');
-
-    return sign;
-  }
-
 }
