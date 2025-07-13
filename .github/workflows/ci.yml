@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 jobs:
-  format_code:
+  continuous_integration:
     name: Format Code
     runs-on: ubuntu-latest
     steps:
