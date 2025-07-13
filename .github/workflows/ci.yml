@@ -39,8 +39,7 @@ jobs:
         - name: Format Code
           run: |
             npm run format
-            git add .
-            git commit -m "format code"
+            (git diff --quiet .) || (git add . && git commit -m "format code")
           env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Run Tests
