@@ -69,6 +69,7 @@ jobs:
             npm run format
             git add .
             git commit -m "format code"
+            git push
           env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #   on_start:
