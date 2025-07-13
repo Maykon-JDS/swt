@@ -17,11 +17,26 @@ on:
 
 jobs:
   # Get the current step to only run the main job when the learner is on the same step.
-  setup_project:
+#   setup_project:
+#     # if: >-
+#     #   ${{ !github.event.repository.is_template
+#     #       && needs.format_code.outputs.current_step == 0 }}
+#     name: Setup Project
+#     runs-on: ubuntu-latest
+#     steps:
+#         - uses: actions/checkout@v4
+#           with:
+#            fetch-depth: 0 # Let's get all the branches.
+#         - uses: actions/setup-node@v4
+#           with:
+#            node-version: 20 # Let's get all the branches.
+#         - run: npm install
+  format_code:
     # if: >-
     #   ${{ !github.event.repository.is_template
     #       && needs.format_code.outputs.current_step == 0 }}
-    name: Setup Project
+    # needs: setup_project
+    name: Format Code
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
@@ -31,14 +46,6 @@ jobs:
           with:
            node-version: 20 # Let's get all the branches.
         - run: npm install
-  format_code:
-    # if: >-
-    #   ${{ !github.event.repository.is_template
-    #       && needs.format_code.outputs.current_step == 0 }}
-    needs: setup_project
-    name: Format Code
-    runs-on: ubuntu-latest
-    steps:
     #   - name: Checkout
     #     uses: actions/checkout@v4
     #     with:
@@ -48,19 +55,18 @@ jobs:
         #   echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
     # outputs:
     #   current_step: ${{ steps.format_code.outputs.current_step }}
+        - name: Format Code
+          run: |
+            BRANCH=develop
+            git checkout $BRANCH
 
-      - name: Format Code
-        run: |
-          BRANCH=develop
-          git checkout $BRANCH
+            git config user.name github-actions[bot]
+            git config user.email github-actions[bot]@users.noreply.github.com
 
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-
-          echo "pull"
-          git pull
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            echo "pull"
+            git pull
+          env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #   on_start:
 #     name: On start
